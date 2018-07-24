@@ -28,13 +28,13 @@ const usuarioPossuiNomeMiddleware = (req, res, next) => {
 app.get('/major', usuarioPossuiNomeMiddleware, (req, res) => {
   const { nomeUsuario } = req.query;
 
-  res.send(`Parabéns ${nomeUsuario}, você tem mais que 18 anos.`);
+  res.render('major', { nomeUsuario });
 });
 
 app.get('/minor', usuarioPossuiNomeMiddleware, (req, res) => {
   const { nomeUsuario } = req.query;
 
-  res.send(`Que pena ${nomeUsuario}, você tem menos que 18 anos.`);
+  res.render('minor', { nomeUsuario });
 });
 
 app.post('/check', (req, res) => {
