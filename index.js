@@ -21,11 +21,8 @@ app.get('/', (req, res) => {
 });
 
 const usuarioPossuiNomeMiddleware = (req, res, next) => {
-  if (req.query.nomeUsuario === undefined || req.query.nomeUsuario === '') {
-    res.redirect('/');
-  } else {
-    next();
-  }
+  const { nomeUsuario } = req.query;
+  return !nomeUsuario ? res.redirect('/') : next();
 };
 
 app.get('/major', usuarioPossuiNomeMiddleware, (req, res) => {
@@ -42,14 +39,11 @@ app.get('/minor', usuarioPossuiNomeMiddleware, (req, res) => {
 
 app.post('/check', (req, res) => {
   const { dataNascimentoUsuario, nomeUsuario } = req.body;
-
   const idadeUsuario = moment().diff(moment(dataNascimentoUsuario, 'DD/MM/YYYY'), 'years');
 
-  if (idadeUsuario > 18) {
-    res.redirect(`/major?nomeUsuario=${nomeUsuario}`);
-  } else {
-    res.redirect(`/minor?nomeUsuario=${nomeUsuario}`);
-  }
+  return idadeUsuario >= 18
+    ? res.redirect(`/major?nomeUsuario=${nomeUsuario}`)
+    : res.redirect(`/minor?nomeUsuario=${nomeUsuario}`);
 });
 
 app.listen(3000);
